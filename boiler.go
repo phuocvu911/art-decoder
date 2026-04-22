@@ -8,6 +8,37 @@ import (
 	"strings"
 )
 
+// ANSI 256-color foreground escape. We pick from a vivid spread across the
+// 256-color cube, skipping the muddy low-16 system colors.
+var paintColors = []int{
+	196, 202, 208, 214, 220, 226,
+	118, 82, 46, 47, 48, 49,
+	51, 45, 39, 33, 27, 21,
+	57, 93, 129, 165, 201, 200,
+	160, 124, 88, 52, 94, 130,
+	136, 142, 148, 154,
+}
+
+// paintLine colorizes each non-space character with a stable per-character color.
+// The colorMap persists across lines so the same character always gets the same color.
+func paintLine(line string, colorMap map[rune]int, nextColor *int) string {
+	var sb strings.Builder
+	for _, ch := range line {
+		if ch == ' ' {
+			sb.WriteRune(ch)
+			continue
+		}
+		idx, ok := colorMap[ch]
+		if !ok {
+			idx = *nextColor % len(paintColors)
+			colorMap[ch] = idx
+			*nextColor++
+		}
+		fmt.Fprintf(&sb, "\033[38;5;%dm%c\033[0m", paintColors[idx], ch)
+	}
+	return sb.String()
+}
+
 // decode expands encoded art notation into plain text.
 func decode(input string) (string, error) {
 	var result strings.Builder
@@ -130,13 +161,16 @@ func printUsage() {
 Flags:
   --encode, -e    Encode plain text into art-decoder notation
   --multi,  -m    Read multiple lines from stdin
+  --paint,  -p    Colorize output: each unique character gets its own ANSI color
   --help,   -h    Show this help
 
 Examples:
   art-decoder "[5 #][5 -_]-[5 #]"
   art-decoder --encode "#####-_-_-_-_-_-#####"
   art-decoder --multi < file.encoded
-  art-decoder --encode --multi < file.art`)
+  art-decoder --encode --multi < file.art
+  art-decoder --paint "[5 #][5 -_]-[5 #]"
+  art-decoder --paint --multi < plane.encoded`)
 }
 
 func main() {
@@ -149,6 +183,7 @@ func main() {
 
 	encodeMode := false
 	multiMode := false
+	paintMode := false
 	var positional []string
 
 	for _, arg := range args {
@@ -157,6 +192,8 @@ func main() {
 			encodeMode = true
 		case "--multi", "-m":
 			multiMode = true
+		case "--paint", "-p":
+			paintMode = true
 		case "--help", "-h":
 			printUsage()
 			os.Exit(0)
@@ -169,10 +206,12 @@ func main() {
 		}
 	}
 
+	colorMap := make(map[rune]int)
+	nextColor := 0
+
 	if multiMode {
 		var lines []string
 		scanner := bufio.NewScanner(os.Stdin)
-		// Increase scanner buffer for long lines (large art files)
 		buf := make([]byte, 0, 64*1024)
 		scanner.Buffer(buf, 1024*1024)
 		for scanner.Scan() {
@@ -190,7 +229,11 @@ func main() {
 				os.Exit(1)
 			}
 			for _, line := range decoded {
-				fmt.Println(line)
+				if paintMode {
+					fmt.Println(paintLine(line, colorMap, &nextColor))
+				} else {
+					fmt.Println(line)
+				}
 			}
 		}
 		return
@@ -212,6 +255,10 @@ func main() {
 			fmt.Println("Error")
 			os.Exit(1)
 		}
-		fmt.Println(decoded)
+		if paintMode {
+			fmt.Println(paintLine(decoded, colorMap, &nextColor))
+		} else {
+			fmt.Println(decoded)
+		}
 	}
 }
