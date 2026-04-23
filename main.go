@@ -7,8 +7,8 @@ import (
 
 func printUsage() {
 	fmt.Fprintln(os.Stderr, `Usage:
-  art-decoder [flags] "<encoded_string>"
-  art-decoder --multi [flags]   (reads lines from stdin)
+  ./art-decoder [flags] "<encoded_string>"
+  ./art-decoder --multi [flags]   (reads lines from stdin)
 
 Flags:
   --encode, -e    Encode plain text into art-decoder notation
@@ -17,12 +17,12 @@ Flags:
   --help,   -h    Show this help
 
 Examples:
-  art-decoder "[5 #][5 -_]-[5 #]"
-  art-decoder --encode "#####-_-_-_-_-_-#####"
-  art-decoder --multi < file.encoded
-  art-decoder --encode --multi < file.art
-  art-decoder --paint "[5 #][5 -_]-[5 #]"
-  art-decoder --paint --multi < file.encoded`)
+  ./art-decoder "[5 #][5 -_]-[5 #]"
+  ./art-decoder --encode "#####-_-_-_-_-_-#####"
+  ./art-decoder --multi < file.encoded
+  ./art-decoder --encode --multi < file.art
+  ./art-decoder --paint "[5 #][5 -_]-[5 #]"
+  ./art-decoder --paint --multi < file.encoded`)
 }
 
 func main() {
@@ -32,4 +32,9 @@ func main() {
 		printUsage()
 		os.Exit(1)
 	}
+
+	encodeMode := false
+	multiMode := false
+	paintMode := false
+
 }
