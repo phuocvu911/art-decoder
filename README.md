@@ -78,14 +78,14 @@ Compresses plain text art back into the notation. The encoder scans each positio
 $ ./art-decoder --encode "#####-_-_-_-_-_-#####"
 #####[5 -_]-#####
 
-$ ./art-decoder --encode "ABCDDDDDDDDDDEFG"
+$ ./art-decoder -e "ABCDDDDDDDDDDEFG"
 ABC[10 D]EFG
 ```
 
 Round-trip example:
 
 ```bash
-$ ./art-decoder "$(./art-decoder --encode "ABCDDDDDDDDDDEFG")"
+$ ./art-decoder "$(./art-decoder -e "ABCDDDDDDDDDDEFG")"
 ABCDDDDDDDDDDEFG
 ```
 
@@ -98,10 +98,10 @@ Reads multiple lines from stdin, processing each line independently. Works with 
 ./art-decoder --multi < plane.encoded
 
 # Encode a plain art file
-./art-decoder --encode --multi < plane.art
+./art-decoder -e -m < plane.art
 
 # Full round-trip
-cat plane.art | ./art-decoder --encode --multi | ./art-decoder --multi
+cat plane.art | ./art-decoder -e -m | ./art-decoder -m
 ```
 
 ---
@@ -112,7 +112,7 @@ Colorizes decoded art in the terminal. Each unique character is assigned a disti
 
 ```bash
 ./art-decoder --paint "[5 #][5 -_]-[5 #]"
-./art-decoder --paint --multi < plane.encoded
+./art-decoder -p -m < plane.encoded
 ```
 
 Paint mode has no effect on encode mode and does not alter any output bytes — it only wraps characters in ANSI escape codes for display. It is safe to combine with `--multi`.
