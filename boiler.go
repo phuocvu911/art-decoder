@@ -41,6 +41,9 @@ func paintLine(line string, colorMap map[rune]int, nextColor *int) string {
 
 // decode expands encoded art notation into plain text.
 func decode(input string) (string, error) {
+	if len(input) == 0 {
+		return "", fmt.Errorf("input line is empty")
+	}
 	var result strings.Builder
 	i := 0
 	for i < len(input) {
@@ -92,42 +95,26 @@ func encode(input string) string {
 	}
 
 	var result strings.Builder
-	i := 0
-	for i < len(input) {
-		remaining := input[i:]
-		bestSaving := 0
-		bestCount := 1
-		bestUnit := string(input[i])
+	count := 1
 
-		for unitLen := 1; unitLen <= len(remaining)/2; unitLen++ {
-			unit := remaining[:unitLen]
-			count := 1
-			for j := unitLen; j+unitLen <= len(remaining); j += unitLen {
-				if remaining[j:j+unitLen] == unit {
-					count++
-				} else {
-					break
-				}
-			}
-			if count > 1 {
-				expanded := unitLen * count
-				encoded := len(fmt.Sprintf("[%d %s]", count, unit))
-				saving := expanded - encoded
-				if saving > bestSaving {
-					bestSaving = saving
-					bestCount = count
-					bestUnit = unit
-				}
-			}
-		}
-
-		if bestSaving > 0 {
-			result.WriteString(fmt.Sprintf("[%d %s]", bestCount, bestUnit))
-			i += len(bestUnit) * bestCount
+	for i := 1; i < len(input); i++ {
+		if input[i] == input[i-1] {
+			count++
 		} else {
-			result.WriteByte(input[i])
-			i++
+			if count > 1 {
+				result.WriteString(fmt.Sprintf("[%d %c]", count, input[i-1]))
+			} else {
+				result.WriteByte(input[i-1])
+			}
+			count = 1
 		}
+	}
+
+	// handle last run
+	if count > 1 {
+		result.WriteString(fmt.Sprintf("[%d %c]", count, input[len(input)-1]))
+	} else {
+		result.WriteByte(input[len(input)-1])
 	}
 
 	return result.String()
@@ -164,7 +151,7 @@ func main() {
 	encodeMode := false
 	multiMode := false
 	paintMode := false
-	var positional []string
+	var input string
 
 	for _, arg := range args {
 		switch arg {
@@ -182,7 +169,7 @@ func main() {
 				fmt.Fprintf(os.Stderr, "Unknown flag: %s\n", arg)
 				os.Exit(1)
 			}
-			positional = append(positional, arg)
+			input = arg
 		}
 	}
 
@@ -219,13 +206,11 @@ func main() {
 		return
 	}
 
-	if len(positional) == 0 {
+	if input == "" {
 		fmt.Fprintln(os.Stderr, "Error: no input string provided")
 		printUsage()
 		os.Exit(1)
 	}
-
-	input := positional[0]
 
 	if encodeMode {
 		fmt.Println(encode(input))
