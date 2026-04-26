@@ -45,7 +45,7 @@ go run . "<encoded string>"
 ```bash
 ./art-decoder "<encoded string>"
 ```
-
+Example:
 ```
 $ ./art-decoder "[5 #][5 -_]-[5 #]"
 #####-_-_-_-_-_-#####
