@@ -45,8 +45,8 @@ func decode(input string) (string, error) {
 		return "", fmt.Errorf("input line is empty")
 	}
 	var result strings.Builder
-	i := 0
-	for i < len(input) {
+
+	for i := 0; i < len(input); i++ {
 		if input[i] == '[' {
 			end := strings.Index(input[i:], "]")
 			if end == -1 {
@@ -77,12 +77,11 @@ func decode(input string) (string, error) {
 				result.WriteString(pattern)
 			}
 
-			i = end + 1
+			i = end
 		} else if input[i] == ']' {
 			return "", fmt.Errorf("unbalanced closing bracket")
 		} else {
 			result.WriteByte(input[i])
-			i++
 		}
 	}
 	return result.String(), nil
