@@ -1,6 +1,7 @@
 package main
 
 import (
+	u "art-decoder/utils"
 	"fmt"
 	"os"
 	"strings"
@@ -57,5 +58,23 @@ func main() {
 			}
 			input = arg
 		}
+	}
+
+	if encodeMode {
+		fmt.Println(u.Encode(input))
+	} else {
+		decoded, err := u.Decode(input)
+		if err != nil {
+			fmt.Println("Error")
+			os.Exit(1)
+		}
+		fmt.Println(decoded)
+	}
+	if paintMode {
+		colorMap := make(map[rune]int)
+		nextColor := 0
+		fmt.Println(boiler.PaintLine(decoded, colorMap, &nextColor))
+	} else {
+		fmt.Println(decoded)
 	}
 }
