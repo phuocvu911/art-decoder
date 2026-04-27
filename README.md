@@ -108,7 +108,7 @@ cat plane.art | ./art-decoder -e -m | ./art-decoder -m
 
 ## Bonus Feature: Paint Mode (`--paint` / `-p`)
 
-Colorizes decoded art in the terminal. Each unique character is assigned a distinct, stable ANSI 256-color — the same character always gets the same color across all lines, so structural patterns in the art become visually obvious at a glance.
+Colorizes decoded art in the terminal. Each unique character is assigned a distinct, stable ANSI 256-color — the same character always gets the same color across all lines, so structural patterns in the art become visually obvious at a glance. Flag `-p` does not work with flag `-e`.
 
 ```bash
 ./art-decoder --paint "[5 #][5 -_]-[5 #]"
