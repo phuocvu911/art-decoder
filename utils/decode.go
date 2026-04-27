@@ -51,35 +51,3 @@ func Decode(input string) (string, error) {
 	}
 	return result.String(), nil
 }
-
-// encode converts plain text into art-decoder notation.
-func Encode(input string) string {
-	if len(input) == 0 {
-		return ""
-	}
-
-	var result strings.Builder
-	count := 1
-
-	for i := 1; i < len(input); i++ {
-		if input[i] == input[i-1] {
-			count++
-		} else {
-			if count > 1 {
-				fmt.Fprintf(&result, "[%d %c]", count, input[i-1])
-			} else {
-				result.WriteByte(input[i-1])
-			}
-			count = 1
-		}
-	}
-
-	// Handle the last run
-	if count > 1 {
-		fmt.Fprintf(&result, "[%d %c]", count, input[len(input)-1])
-	} else {
-		result.WriteByte(input[len(input)-1])
-	}
-
-	return result.String()
-}

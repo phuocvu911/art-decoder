@@ -8,7 +8,7 @@ import (
 func PrintUsage() {
 	fmt.Fprintln(os.Stderr, `Usage:
   ./art-decoder [flags] "<encoded_string>"
-  ./art-decoder --multi [flags]   (reads lines from stdin)
+  ./art-decoder --multi [flags] < <encoded_file>
 
 Flags:
   --encode, -e    Encode plain text into art-decoder notation

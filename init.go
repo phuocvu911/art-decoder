@@ -2,10 +2,12 @@ package main
 
 import "flag"
 
-var encodeMode bool
-var multiMode bool
-var paintMode bool
-var helpMode bool
+var (
+	encodeMode bool
+	multiMode  bool
+	paintMode  bool
+	helpMode   bool
+)
 
 func init() {
 	flag.BoolVar(&encodeMode, "encode", false, "enable encode mode")

@@ -134,7 +134,7 @@ Flags:
 ## Design Notes
 
 - The **decoder** is a single-pass O(n) character scanner — no regex, no splitting.
-- The **encoder** scans for repetitive character and compress the it to decoded form.
+- The **encoder** uses a greedy best-saving search: at each position it tries every pattern length up to `remaining/2` and picks whichever compresses most. It only encodes when doing so actually reduces the output length.
 - The **paint** feature builds a `rune → color index` map that persists across lines, so character coloring is consistent throughout a multi-line art piece.
 - `bufio.Scanner` with a 1 MB line buffer handles very long lines in large art files without issues.
 - Square brackets `[]` are **not printable** in this format.
