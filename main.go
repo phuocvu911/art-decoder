@@ -34,7 +34,12 @@ func main() {
 			}
 		} else {
 			for _, line := range lines {
-				fmt.Println(u.Decode(line))
+				decoded, err := u.Decode(line)
+				if err != nil {
+					fmt.Fprintln(os.Stderr, "Error")
+					continue
+				}
+				fmt.Println(decoded)
 			}
 		}
 	} else {
