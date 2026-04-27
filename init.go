@@ -9,6 +9,7 @@ var (
 	helpMode   bool
 )
 
+// flags registeration. No need to run bc init() will be called automatically before main() is executed.
 func init() {
 	flag.BoolVar(&encodeMode, "encode", false, "enable encode mode")
 	flag.BoolVar(&encodeMode, "e", false, "alias for encode")

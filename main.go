@@ -28,8 +28,14 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Error reading input:", err)
 			os.Exit(1)
 		}
-		for _, line := range lines {
-			fmt.Println(u.Decode(line))
+		if encodeMode {
+			for _, line := range lines {
+				fmt.Println(u.Encode(line))
+			}
+		} else {
+			for _, line := range lines {
+				fmt.Println(u.Decode(line))
+			}
 		}
 	} else {
 		for _, arg := range args {
@@ -37,3 +43,5 @@ func main() {
 		}
 	}
 }
+
+//remember to check multi, some lines are err tehn we should log those line and continue with the rest.
