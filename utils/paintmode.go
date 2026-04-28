@@ -6,7 +6,7 @@ import (
 )
 
 // support upto 34 different colors.
-var paintColors = []int{
+var PaintColors = []int{
 	196, 202, 208, 214, 220, 226,
 	118, 82, 46, 47, 48, 49,
 	51, 45, 39, 33, 27, 21,

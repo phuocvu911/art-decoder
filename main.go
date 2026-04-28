@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"math/rand/v2"
 	"os"
 
 	u "art-decoder/utils"
@@ -19,7 +20,7 @@ func main() {
 	args := flag.Args()
 
 	colorMap := make(map[rune]int)
-	nextColor := 0
+	nextColor := rand.IntN(len(u.PaintColors))
 
 	if multiMode {
 		scanner := bufio.NewScanner(os.Stdin)
