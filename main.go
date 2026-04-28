@@ -18,35 +18,53 @@ func main() {
 	}
 	args := flag.Args()
 
+	colorMap := make(map[rune]int)
+	nextColor := 0
+
 	if multiMode {
-		lines := make([]string, 0)
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			lines = append(lines, scanner.Text())
-		}
-		if err := scanner.Err(); err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading input:", err)
-			os.Exit(1)
-		}
-		if encodeMode {
-			for _, line := range lines {
-				fmt.Println(u.Encode(line))
+			line := scanner.Text()
+
+			if err := scanner.Err(); err != nil {
+				fmt.Fprintln(os.Stderr, "Error reading input:", err)
+				os.Exit(1)
 			}
-		} else {
-			for _, line := range lines {
+
+			if encodeMode {
+				fmt.Println(u.Encode(line))
+			} else {
 				decoded, err := u.Decode(line)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, "Error")
 					continue
 				}
+				if paintMode {
+					fmt.Println(u.PaintLine(decoded, colorMap, &nextColor))
+				} else {
+					fmt.Println(decoded)
+				}
+			}
+		}
+	} else { // single mode, accept only 1 arg.
+		if len(args) != 1 {
+			fmt.Fprintln(os.Stderr, "Error: expected 1 argument, got", len(args))
+			u.PrintUsage()
+			os.Exit(1)
+		}
+		if encodeMode {
+			fmt.Println(u.Encode(args[0]))
+		} else {
+			decoded, err := u.Decode(args[0])
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "Error")
+				os.Exit(1)
+			}
+			if paintMode {
+				fmt.Println(u.PaintLine(decoded, colorMap, &nextColor))
+			} else {
 				fmt.Println(decoded)
 			}
 		}
-	} else {
-		for _, arg := range args {
-			fmt.Println(u.Decode(arg))
-		}
 	}
 }
-
-//remember to check multi, some lines are err tehn we should log those line and continue with the rest.
