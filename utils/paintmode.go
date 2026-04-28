@@ -7,12 +7,12 @@ import (
 
 // support upto 34 different colors.
 var PaintColors = []int{
-	196, 202, 208, 214, 220, 226,
-	118, 82, 46, 47, 48, 49,
-	51, 45, 39, 33, 27, 21,
-	57, 93, 129, 165, 201, 200,
-	160, 124, 88, 52, 94, 130,
-	136, 142, 148, 154,
+	226, 46, 21, 201, 196, 51,
+	154, 129, 52, 220, 47, 27,
+	200, 88, 214, 48, 33, 165,
+	124, 208, 49, 39, 93, 160,
+	202, 118, 45, 57, 130, 82,
+	136, 94, 142, 148,
 }
 
 // using ptr nc we have to change the value of nc in the caller function, so we can keep track of the next color to use across multiple lines.
@@ -25,11 +25,11 @@ func PaintLine(line string, colorMap map[rune]int, nextColor *int) string {
 		}
 		val, ok := colorMap[ch]
 		if !ok {
-			val = *nextColor % len(paintColors)
+			val = *nextColor % len(PaintColors)
 			colorMap[ch] = val
 			*nextColor++
 		}
-		fmt.Fprintf(&sb, "\033[38;5;%dm%c\033[0m", paintColors[val], ch)
+		fmt.Fprintf(&sb, "\033[38;5;%dm%c\033[0m", PaintColors[val], ch)
 	}
 	return sb.String()
 }
