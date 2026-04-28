@@ -10,7 +10,7 @@ A command-line tool for encoding and decoding text-based art using a compact run
 
 ### Notation Format
 
-Repeated characters are written as `[N pattern]`, where `N` is the repeat count and `pattern` is everything after the single delimiter space.
+Repeated characters are written as `[N pattern]`, where `N` is the repeat count and `pattern` is everything (character or string) after the single delimiter space.
 
 | Encoded | Decoded |
 |---|---|
