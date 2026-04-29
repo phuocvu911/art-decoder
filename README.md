@@ -61,7 +61,7 @@ If the input is malformed, the program prints `Error` and exits with code 1.
 | Case | Example |
 |---|---|
 | First argument not a number | `[abc X]` |
-| No space separator | `[5]` |
+| No space separator | `[5m]` |
 | Empty pattern | `[5 ]` |
 | Unbalanced opening bracket | `[10 A` |
 | Unbalanced closing bracket | `hello]world` |
@@ -82,40 +82,30 @@ $ ./art-decoder -e "ABCDDDDDDDDDDEFG"
 ABC[10 D]EFG
 ```
 
-Round-trip example:
-
-```bash
-$ ./art-decoder "$(./art-decoder -e "ABCDDDDDDDDDDEFG")"
-ABCDDDDDDDDDDEFG
-```
-
 ### Multiline Mode (`--multi` / `-m`)
 
-Reads multiple lines from stdin, processing each line independently. Works with both decode (default) and encode mode.
+Reads multiple lines from `stdin`, processing each line independently. Works with both decode (default) and encode mode. Noting that operator `<` is used to feed the content of the text file as a `stdin` to a command.
 
 ```bash
 # Decode a multi-line encoded file
-./art-decoder --multi < plane.encoded
+./art-decoder --multi < plane.encoded.txt
 
 # Encode a plain art file
-./art-decoder -e -m < plane.art
-
-# Full round-trip
-cat plane.art | ./art-decoder -e -m | ./art-decoder -m
+./art-decoder -e -m < plane.art.txt
 ```
 
 ---
 
 ## Bonus Feature: Paint Mode (`--paint` / `-p`)
 
-Colorizes decoded art in the terminal. Each unique character is assigned a distinct, stable ANSI 256-color — the same character always gets the same color across all lines, so structural patterns in the art become visually obvious at a glance. Flag `-p` does not work together with flag `-e`.
+Colorizes decoded art in the terminal. Each unique character is assigned a distinct, stable ANSI 256-color. Flag `-p` does not work together with flag `-e`.
 
 ```bash
 ./art-decoder --paint "[5 #][5 -_]-[5 #]"
 ./art-decoder -p -m < plane.encoded
 ```
 
-Paint mode has no effect on encode mode and does not alter any output bytes — it only wraps characters in ANSI escape codes for display. It is safe to combine with `--multi`.
+Paint mode has the best effect when used combining with `--multi`.
 
 ---
 
