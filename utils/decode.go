@@ -16,7 +16,7 @@ func Decode(input string) (string, error) {
 	for i := 0; i < len(input); i++ {
 		switch input[i] {
 		case '[':
-			end := strings.Index(input[i:], "]")
+			end := strings.Index(input[i:], "]") // return the index of the first closing bracket found in string, or -1 if no closing bracket is found.
 			if end == -1 {
 				return "", fmt.Errorf("unbalanced brackets")
 			}
