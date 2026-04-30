@@ -26,14 +26,9 @@ Repeated characters are written as `[N pattern]`, where `N` is the repeat count 
 **Requirements:** Go 1.18 or later
 
 ```bash
+git clone ...
 cd art-decoder
 go build -o art-decoder .
-```
-
-To run without building:
-
-```bash
-go run . "<encoded string>"
 ```
 
 ---
@@ -98,11 +93,11 @@ Reads multiple lines from `stdin`, processing each line independently. Works wit
 
 ## Bonus Feature: Paint Mode (`--paint` / `-p`)
 
-Colorizes decoded art in the terminal. Each unique character is assigned a distinct, stable ANSI 256-color. Flag `-p` does not work together with flag `-e`.
+Colorizes decoded art in the terminal. Each unique character is assigned a distinct, stable ANSI 256-color. Flag `-p` does not paint the ouput when `--encode` mode is on.
 
 ```bash
 ./art-decoder --paint "[5 #][5 -_]-[5 #]"
-./art-decoder -p -m < plane.encoded
+./art-decoder -p -m < plane.encoded.txt
 ```
 
 Paint mode has the best effect when used combining with `--multi`.
@@ -118,6 +113,8 @@ Flags:
   --paint,  -p    Colorize output with ANSI 256 colors per unique character
   --help,   -h    Show usage
 ```
+
+If unknown flag got passed in command line, the program will throw errors and print supported flags to the terminal.
 
 ---
 
