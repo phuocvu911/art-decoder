@@ -38,6 +38,7 @@ func main() {
 				decoded, err := u.Decode(line)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, "Error")
+					//fmt.Fprintln(os.Stderr, err)
 					continue //log only that error line and continue the rest
 				}
 				if paintMode {
@@ -59,6 +60,7 @@ func main() {
 			decoded, err := u.Decode(args[0])
 			if err != nil {
 				fmt.Fprintln(os.Stderr, "Error")
+				//fmt.Fprintln(os.Stderr, err)
 				os.Exit(1)
 			}
 			if paintMode {
